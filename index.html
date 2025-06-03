@@ -110,6 +110,10 @@
       transform: none;
     }
   </style>
+  <!-- AdSense Global Site Tag -->
+  <script async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2837173229911395"
+          crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="flex justify-center mode-buttons">
@@ -150,30 +154,24 @@
       <div id="gridContainer" class="grid-container"></div>
     </div>
   </div>
+  <!-- AdSense Ad Unit -->
+  <div class="ad-slot" style="margin: 20px auto; text-align: center;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-2837173229911395"
+         data-ad-slot="YYYYYYYYYY"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
   <div class="text-white text-center bg-black bg-opacity-20 p-4 rounded-lg instructions-box w-5/6 mx-auto">
     <h3 class="font-bold mb-2">How to Play</h3>
     <p>Players take turns selecting dots. When a player's selections form a square of any size, they earn points based on the square size.</p>
     <p class="mt-2"><span class="font-bold">Scoring:</span> 1×1 square = 1 point, 2×2 square = 4 points, 3×3 square = 9 points, etc.</p>
     <p class="mt-2"><span class="font-bold">Game End:</span> The game ends when all dots are selected.</p>
   </div>
-  <div class="text-white text-center bg-black bg-opacity-20 p-4 rounded-lg instructions-box w-5/6 mx-auto mt-6">
-    <h3 class="font-bold mb-2">High Scores</h3>
-    <div class="mb-4">
-      <h4 class="font-semibold mb-1">Player vs Player</h4>
-      <ol id="pvpHighScores" class="list-decimal list-inside"></ol>
-    </div>
-    <div class="mb-4">
-      <h4 class="font-semibold mb-1">CPU - Easy</h4>
-      <ol id="cpuEasyHighScores" class="list-decimal list-inside"></ol>
-    </div>
-    <div class="mb-4">
-      <h4 class="font-semibold mb-1">CPU - Medium</h4>
-      <ol id="cpuMediumHighScores" class="list-decimal list-inside"></ol>
-    </div>
-    <div class="mb-4">
-      <h4 class="font-semibold mb-1">CPU - Hard</h4>
-      <ol id="cpuHardHighScores" class="list-decimal list-inside"></ol>
-    </div>
 <!-- Popup message for end of round -->
 <div id="popupMessage" class="fixed inset-0 flex items-center justify-center hidden z-50">
   <div class="rounded-lg p-6 text-center text-white" style="background: linear-gradient(145deg, #FF0000, #007BFF); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); transform: scale(1.3);">
@@ -182,11 +180,6 @@
   </div>
 </div>
 <script>
-// High score arrays
-let pvpHighScores = [];
-let cpuEasyHighScores = [];
-let cpuMediumHighScores = [];
-let cpuHardHighScores = [];
 
 
 // Full JavaScript logic with the correct click handler
@@ -269,7 +262,6 @@ function createGrid() {
             selectedDots.push({ x: parseInt(this.dataset.x), y: parseInt(this.dataset.y), id: this.dataset.id, player: currentPlayer });
             checkForSquares();
             if (selectedDotCount === totalDots) {
-              recordHighScore();
               // Show “Play Again” popup
               document.getElementById('popupMessage').classList.remove('hidden');
             } else {
@@ -380,7 +372,6 @@ function cpuMove() {
   selectedDots.push({ x: parseInt(chosenDot.dataset.x), y: parseInt(chosenDot.dataset.y), id: chosenDot.dataset.id, player: 2 });
   checkForSquares();
   if (selectedDotCount === totalDots) {
-    recordHighScore();
     // Show “Play Again” popup
     document.getElementById('popupMessage').classList.remove('hidden');
     return;
@@ -557,46 +548,6 @@ cpuMode.addEventListener('click', () => {
   startTurnTimer();
 });
 
-function recordHighScore() {
-  let player1FinalScore = scores[0];
-  let player2FinalScore = scores[1];
-  let winnerScore = Math.max(player1FinalScore, player2FinalScore);
-
-  if (mode === "pvp") {
-    pvpHighScores.push(winnerScore);
-    pvpHighScores.sort((a, b) => b - a);
-    if (pvpHighScores.length > 10) pvpHighScores.length = 10;
-    updateHighScoreTable('pvpHighScores', pvpHighScores);
-  } else if (mode === "cpu") {
-    if (difficulty === "easy") {
-      cpuEasyHighScores.push(winnerScore);
-      cpuEasyHighScores.sort((a, b) => b - a);
-      if (cpuEasyHighScores.length > 10) cpuEasyHighScores.length = 10;
-      updateHighScoreTable('cpuEasyHighScores', cpuEasyHighScores);
-    } else if (difficulty === "medium") {
-      cpuMediumHighScores.push(winnerScore);
-      cpuMediumHighScores.sort((a, b) => b - a);
-      if (cpuMediumHighScores.length > 10) cpuMediumHighScores.length = 10;
-      updateHighScoreTable('cpuMediumHighScores', cpuMediumHighScores);
-    } else if (difficulty === "hard") {
-      cpuHardHighScores.push(winnerScore);
-      cpuHardHighScores.sort((a, b) => b - a);
-      if (cpuHardHighScores.length > 10) cpuHardHighScores.length = 10;
-      updateHighScoreTable('cpuHardHighScores', cpuHardHighScores);
-    }
-  }
-}
-
-function updateHighScoreTable(elementId, scores) {
-  const list = document.getElementById(elementId);
-  if (!list) return;
-  list.innerHTML = '';
-  scores.forEach(score => {
-    const li = document.createElement('li');
-    li.textContent = score;
-    list.appendChild(li);
-  });
-}
 </script>
 <script>
 // Popup "Play Again" button listener
